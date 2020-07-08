@@ -1,0 +1,25 @@
+# Project specific
+script.config.js
+animations/*
+dist/*
+
+# MacOS
+.DS_Store
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# NPM
+node_modules/
+.npm
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
