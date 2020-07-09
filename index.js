@@ -2,9 +2,10 @@
 const fs = require('fs');
 const path = require('path');
 
+const core = require('./src/core.js');
+
 // configuration
 const localConfigPath = './script.config.js';
-
 let defaultConfig = require('./src/default.config.js');
 let localConfig = {}
 if (fs.existsSync(localConfigPath)) {
@@ -17,48 +18,44 @@ const animationFolder = `./${config.srcFolder}/`;
 const animationBundle = {};
 const animationBundleMap = {};
 
-// scan directory for json files
-fs.readdir(animationFolder, (err, files) => {
+/**
+ * bundling script
+ */
+(async () => {
 
-  let animationFiles = files.filter(function (file) {
-    return path.extname(file).toLowerCase() === '.json'
-  });
+  core.scanFolder(animationFolder).then((files) => {
 
-  console.log('Files found: ' + animationFiles.length);
+    let jsonFiles = core.filterFiles(files);
 
-  animationFiles.forEach((file) => {
-    // cleanup filename to generate key
-    // [maybe] support key->file mapping
-    let key = path.basename(file, path.extname(file))
-      .toLowerCase()
-      .replace(/[\W_]+/g, "");
-    let animationData = require(animationFolder + file);
-    animationBundle[key] = animationData;
-    // map reference
-    animationBundleMap[key] = file;
-  });
+    jsonFiles.forEach((file) => {
 
-  const jsonBundle = JSON.stringify(animationBundle);
+      // [to consider] support key->file mapping
+      let key = core.slugify(file);
 
-  // output
-  fs.readFile(config.template, 'utf8', function (err, data) {
-    if (err) {
-      return console.log(err);
-    }
+      let animationData = require(animationFolder + file);
+      animationData = core.processImages(animationData, key);
 
-    let output = data.replace(/\${bundle}/g, jsonBundle);
-    let outputMap = JSON.stringify(animationBundleMap);
+      // store in our bundle
+      animationBundle[key] = animationData;
+      // add to map reference
+      animationBundleMap[key] = file;
 
-    fs.writeFile(config.output, output, (err) => {
-      if (err) throw err;
-      // complete
-      console.log('Animation data bundle generated in '+config.output);
     });
 
-    fs.writeFile(config.output+'.map', outputMap, (err) => {
-      if (err) throw err;
+    // retrieve object template
+    core.getTemplate(config.template).then((template) => {
+
+      // insert data into template
+      let output = template.replace(/\${bundle}/g, JSON.stringify(animationBundle))
+                           .replace(/\${variable}/g, config.variable);
+      let outputMap = JSON.stringify(animationBundleMap);
+
+      core.writeOutput(config.output, output);
+      core.writeOutput(config.output+'.map', outputMap);
+      console.log('Animation data bundle generated in ' + config.output);
+
     });
 
   });
 
-});
+})();

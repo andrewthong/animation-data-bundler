@@ -12,6 +12,11 @@ module.exports = {
   template: './src/_template.js',
 
   /**
+   * variable name of iife
+   */
+  variable: 'animations',
+
+  /**
    * output file
    */
   output: './dist/output.js'

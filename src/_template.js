@@ -1,6 +1,6 @@
 /**
  * output template
  */
-var animations = (function () {
+var ${variable} = (function () {
   return ${bundle}
 }());
