@@ -12,9 +12,19 @@ module.exports = {
   template: './src/_template.js',
 
   /**
-   * variable name of iife
+   * variable name for iife
    */
-  variable: 'animations',
+  variable: 'bmAnimations',
+
+  /**
+   * 
+   */
+  imagePrefix: null,
+
+  /**
+   * 
+   */
+  imageDomain: null,
 
   /**
    * output file

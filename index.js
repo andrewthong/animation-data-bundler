@@ -33,7 +33,7 @@ const animationBundleMap = {};
       let key = core.slugify(file);
 
       let animationData = require(animationFolder + file);
-      animationData = core.processImages(animationData, key);
+      animationData = core.processImages(animationData, key, config);
 
       // store in our bundle
       animationBundle[key] = animationData;
