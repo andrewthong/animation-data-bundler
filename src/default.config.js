@@ -17,12 +17,7 @@ module.exports = {
   variable: 'bmAnimations',
 
   /**
-   * 
-   */
-  imagePrefix: null,
-
-  /**
-   * 
+   * when set, replaces the 'u' prefix in image assets
    */
   imageDomain: null,
 

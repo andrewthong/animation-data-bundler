@@ -52,11 +52,7 @@ const processImages = (animationData, key, config) => {
   animationData.assets.forEach((asset) => {
     let asset_file = asset.p
     if (asset_file && path.extname(asset_file) === '.png') {
-      let p = key + '-' + asset.p;
-      // additional common prefix
-      if(config.imagePrefix)
-        p = config.imagePrefix + p;
-      asset.p = p;
+      asset.p = key + '-' + asset.p;
       // domain override
       if(config.imageDomain)
         asset.u = config.imageDomain;
