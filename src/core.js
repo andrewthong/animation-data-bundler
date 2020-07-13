@@ -48,11 +48,14 @@ const slugify = (file) => {
  * @param {Object} animationData 
  * @param {String} key 
  */
-const processImages = (animationData, key) => {
+const processImages = (animationData, key, config) => {
   animationData.assets.forEach((asset) => {
     let asset_file = asset.p
     if (asset_file && path.extname(asset_file) === '.png') {
       asset.p = key + '-' + asset.p;
+      // domain override
+      if(config.imageDomain)
+        asset.u = config.imageDomain;
     }
   });
   return animationData;
